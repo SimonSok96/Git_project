@@ -1,7 +1,22 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .models import Profile
 
 def home(request):
     return render(request, 'home.html', {})
 
-def profile(request):
-    return render(request, 'profile.html', {})
+def profiles(request):
+    if request.user.is_authenticated:
+        l = Profile.objects.exclude(user=request.user)
+        return render(request, 'Profilepages.html', {"list_profile":l})
+    else:
+        messages.success(request, ("You ougth to be singed in!"))
+        return redirect("home")
+    
+def someonesprofile(request):
+    if request.user.is_authenticated:
+        l = Profile.objects.exclude(user=request.user)
+        return render(request, 'someonesprofile.html', {"list_profile":l})
+    else:
+        messages.success(request, ("You ougth to be singed in!"))
+        return redirect("home")
