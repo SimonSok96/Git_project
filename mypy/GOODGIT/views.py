@@ -13,10 +13,10 @@ def profiles(request):
         messages.success(request, ("You ougth to be singed in!"))
         return redirect("home")
     
-def someonesprofile(request):
+def someonesprofile(request, pk):
     if request.user.is_authenticated:
-        l = Profile.objects.exclude(user=request.user)
-        return render(request, 'someonesprofile.html', {"list_profile":l})
+        l = Profile.objects.get(pk=pk)
+        return render(request, 'someonesprofile.html', {"profile":l})
     else:
         messages.success(request, ("You ougth to be singed in!"))
         return redirect("home")

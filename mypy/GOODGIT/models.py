@@ -12,7 +12,7 @@ class Categiry(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     follows = models.ManyToManyField("self", related_name="followed_by", symmetrical=False, blank=True)
-    date_create = models.DateTimeField(User, auto_now=True)
+    # date_create = models.DateTimeField(User, auto_now=True)
     def __str__(self):
         return self.user.username
     
