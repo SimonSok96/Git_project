@@ -9,22 +9,33 @@
             </div>
             <div class='col-4'>
                 <div class="card">
-                    <h5 class="card-header">Featured</h5>
+                    <h5 class="card-header">{{ profile.user.username }} Follows:</h5>
                     <div class="card-body">
-                      <h5 class="card-title">Special title treatment</h5>
-                      <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                      <a href="#" class="btn btn-primary">Go somewhere</a>
+                        {% for i in profile.follows.all %}
+                            <p class="card-text"><a href="{% url 'someonesprofile' i.id %}">@{{i}}</a></p>
+                        {% endfor %}
                     </div>
-                  </div>
-                <strong>followes</strong><br>
-                {% for i in profile.follows.all %}
-                    <a href="{% url 'someonesprofile' i.id %}">@{{i}}</a><br>
-                {% endfor %}
+                </div>
                 <br>
-                <strong>followed by</strong><br>
-                {% for i in profile.followed_by.all %}
-                    <a href="{% url 'someonesprofile' i.id %}">@{{i}}</a><br>
-                {% endfor %}
+                <div class="card">
+                    <h5 class="card-header">These users follow {{ profile.user.username }}:</h5>
+                    <div class="card-body">
+                        {% for i in profile.followed_by.all %}
+                            <a href="{% url 'someonesprofile' i.id %}">@{{i}}</a><br>
+                        {% endfor %}
+                    </div>
+                </div>
+                <br>
+                <form method="post">
+                    {% csrf_token %}
+                    {% if profile in user.profile.follows.all %}
+                        <button type="submit" class="btn btn-danger" name="follow" value="unfollow">Unfollow @{{ profile.user.username }}</button>
+                    {% else %}
+                        <button type="submit" class="btn btn-success" name="follow" value="follow">Follow @{{ profile.user.username }}</button>
+                    {% endif %}
+                </form>
+                <br>
+                <a class="btn btn-secondary" href="{% url 'profiles' %}">back to profiles</a><br>
             </div>
         </div>
     </div>

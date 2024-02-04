@@ -16,6 +16,14 @@ def profiles(request):
 def someonesprofile(request, pk):
     if request.user.is_authenticated:
         l = Profile.objects.get(pk=pk)
+        if request.method == "POST":
+            action = request.POST["follow"]
+            current_user = request.user.profile
+            if action == "follow":
+                current_user.follows.add(l)
+            elif action == "unfollow":
+                current_user.follows.remove(l)
+            current_user.save()
         return render(request, 'someonesprofile.html', {"profile":l})
     else:
         messages.success(request, ("You ougth to be singed in!"))
