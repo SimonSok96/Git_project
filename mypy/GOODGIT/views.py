@@ -1,9 +1,15 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .models import Profile
+from .models import Profile, Tweet
 
 def home(request):
-    return render(request, 'home.html', {})
+    if request.user.is_authenticated:
+        tweets = Tweet.objects.all().order_by("-created_at")
+        return render(request, 'home.html', {"tweets":tweets})
+    else:
+        messages.success(request, ("You ougth to be singed in!"))
+        return redirect("home")
+    
 
 def profiles(request):
     if request.user.is_authenticated:
@@ -16,6 +22,7 @@ def profiles(request):
 def someonesprofile(request, pk):
     if request.user.is_authenticated:
         l = Profile.objects.get(pk=pk)
+        I = Tweet.objects.filter(user_id=pk)
         if request.method == "POST":
             action = request.POST["follow"]
             current_user = request.user.profile
@@ -24,7 +31,7 @@ def someonesprofile(request, pk):
             elif action == "unfollow":
                 current_user.follows.remove(l)
             current_user.save()
-        return render(request, 'someonesprofile.html', {"profile":l})
+        return render(request, 'someonesprofile.html', {"profile":l, "tweets":I})
     else:
         messages.success(request, ("You ougth to be singed in!"))
         return redirect("home")

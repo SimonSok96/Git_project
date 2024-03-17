@@ -23,4 +23,13 @@ def create_profle(sender, instance, created, **kwargs):
         user_profile.follows.set([instance.profile.id])
         user_profile.save()
 post_save.connect(create_profle, sender=User)
+
+
+class Tweet(models.Model):
+    user = models.ForeignKey(User, related_name="tweets", on_delete=models.DO_NOTHING)
+    body = models.CharField(max_length=300)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return f"{self.user} ({self.created_at:%Y-%m-%d %H:%M}): {self.body}"
     
