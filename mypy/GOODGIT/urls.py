@@ -5,5 +5,8 @@ urlpatterns = [
     path('profiles', views.profiles, name='profiles'),
     path('', views.home, name='home'),
     path('someonesprofile/<int:pk>', views.someonesprofile, name='someonesprofile'),
+    
+    path('login/', views.login_user, name="login"),
+    # path('logout/', views.logout_user, name="logout"),
 ]
 
