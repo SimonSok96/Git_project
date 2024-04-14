@@ -11,6 +11,7 @@ class Categiry(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='images/', blank=True, null=True)
     follows = models.ManyToManyField("self", related_name="followed_by", symmetrical=False, blank=True)
     date_create = models.DateTimeField(User, auto_now=True)
     def __str__(self):

@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.models import User
 from .models import Profile, Tweet
-from .forms import TweetForm
+from .forms import TweetForm, RegisterForm, ProfileForm
 
 def home(request):
     if request.user.is_authenticated:
@@ -60,3 +61,40 @@ def login_user(request):
             return redirect("login")
     else:
         return render(request, 'login.html')
+    
+def logout_user(request):
+    logout(request)
+    messages.success(request, ("You have succsessfully loged out"))
+    return redirect("home")
+
+def register(request):
+    form = RegisterForm()
+    if request.method == "POST":
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data["username"]
+            password1 = form.cleaned_data["password1"]
+            user = authenticate(request, username=username, password=password1)
+            login(request, user)
+            messages.success(request, ("You have succsessfully sing in"))
+            return redirect("home")
+    return render(request, 'register.html', {'form': form})
+
+def update_user(request):
+    if request.user.is_authenticated:
+        current_user = User.objects.get(id = request.user.id)
+        profile = Profile.objects.get(user__id = request.user.id)
+        form = RegisterForm(request.POST or None, request.FILES or None, instance = current_user)
+        profileform = ProfileForm(request.POST or None, request.FILES or None, instance = profile)
+        if form.is_valid() and profileform.is_valid():
+            form.save()
+            profileform.save()
+            login(request, current_user)
+            messages.success(request, ("You have succsessfully change your profile"))
+            return redirect("home")
+
+        return render(request, 'update_user.html', {'form': form, 'profileform': profileform})
+    else:
+        messages.success(request, ("You should to be logged in"))
+        return redirect("home")

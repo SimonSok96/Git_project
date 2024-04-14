@@ -24,6 +24,7 @@
             </div>
             <div class='col-4'>
                 <div class="card">
+                    <img src="{% if profile.image %}{{ profile.image.url }}{% else %}{% static "images/avatar.jpg" %}{% endif %}" class="card-img-top img-fluid">
                     <h5 class="card-header">{{ profile.user.username }} Follows:</h5>
                     <div class="card-body">
                         {% for i in profile.follows.all %}
@@ -50,7 +51,8 @@
                     {% endif %}
                 </form>
                 <br>
-                <a class="btn btn-secondary" href="{% url 'profiles' %}">back to profiles</a><br>
+                <a class="btn btn-secondary" href="{% url 'profiles' %}">back to profiles</a><br><br>
+                <a class="btn btn-secondary" href="{% url 'update_user' %}">Update your profile</a><br>
             </div>
         </div>
     </div>

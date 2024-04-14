@@ -6,8 +6,7 @@
         <div class="card mb-3" style="max-width: 540px;">
             <div class="row g-0">
             <div class="col-md-4">
-                <img src="{% static 'images/avatar.jpg' %}"
-                    class="img-fluid rounded-start" alt="...">
+                <img src="{% if i.image %}{{ i.image.url }}{% else %}{% static "images/avatar.jpg" %}{% endif %}" class="card-img-top img-fluid">
             </div>
             <div class="col-md-8">
                 <div class="card-body">
