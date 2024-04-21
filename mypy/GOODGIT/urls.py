@@ -11,6 +11,8 @@ urlpatterns = [
     
     path('register/', views.register, name='register'),
     
-    path('update_user/', views.update_user, name="update_user")
+    path('update_user/', views.update_user, name="update_user"),
+    
+    path('liked/<int:pk>', views.TweetLike, name="liked"),
 ]
 

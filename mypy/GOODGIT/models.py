@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
+from django.conf import settings
 
 class Categiry(models.Model):
     name = models.CharField(max_length=255)
@@ -30,7 +31,27 @@ class Tweet(models.Model):
     user = models.ForeignKey(User, related_name="tweets", on_delete=models.DO_NOTHING)
     body = models.CharField(max_length=300)
     created_at = models.DateTimeField(auto_now_add=True)
+    likes = models.ManyToManyField(User, related_name="tweet_like", blank=True)
+    
+    def likesnum(self):
+        return self.likes.count()
     
     def __str__(self):
         return f"{self.user} ({self.created_at:%Y-%m-%d %H:%M}): {self.body}"
+    
+    
+# class TweetLikes(models.Model):
+#     tweet_post = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, verbose_name='Твитт в блоге')
+#     liked_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
+#     like = models.BooleanField('Like', default=False)
+#     created = models.DateTimeField('Дата и время', auto_now_add=True)
+    
+
+#     class Meta:
+#         verbose_name = 'Blog Like'
+#         verbose_name_plural = 'Blog likes'
+
+#     def __str__(self):
+#         return f'{self.liked_by}: {self.tweet_post} {self.like}'
+
     
